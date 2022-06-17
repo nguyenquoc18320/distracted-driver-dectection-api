@@ -1,0 +1,9 @@
+fastapi
+numpy
+tensorflow
+uvicorn
+mysqlclient
+sqlalchemy
+PyJWT
+python-decouple
+python-multipart
