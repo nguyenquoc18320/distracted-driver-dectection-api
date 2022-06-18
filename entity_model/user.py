@@ -1,6 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String, Date, Integer, Boolean
 from entity_model.base import Base
 from sqlalchemy.orm import relationship
+from entity_model.role import Role
 
 class User(Base):
     __tablename__ = 'user'
@@ -19,7 +20,7 @@ class User(Base):
     role = relationship('Role', backref='role')
 
 
-    def __init__(self, name, gender, birthday, phone, driver_license, role) -> None:
+    def __init__(self, name, gender, birthday, phone, driver_license, role ) -> None:
         self.name = name
         self.gender = gender
         self.birthday = birthday

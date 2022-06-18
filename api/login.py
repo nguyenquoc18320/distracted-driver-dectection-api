@@ -5,7 +5,7 @@ from main import app
 from auth.auth_handler import *
 from entity_model.base import Session
 from entity_model.account import Account
-from controller.user import get_user_by_username_password
+from services.user import get_user_by_username_password
 from pydantic import BaseModel
 
 
@@ -21,8 +21,7 @@ def login (account: Account):
     if result is None:
         raise HTTPException(status_code=401, detail="Unauthorized")
     
-    token = signJWT(account.username)
-
+    token = signJWT(result.id)
 
     return { "data": { 
                     "access_token" :token,

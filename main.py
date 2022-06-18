@@ -24,6 +24,7 @@ app.add_middleware(
 from api.login import *
 from api.test import *
 from api.demo_predict import *
+from api.manage_user import *
 
 if __name__=='__main__':
     uvicorn.run(app)

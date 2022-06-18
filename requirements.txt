@@ -1,6 +1,7 @@
 fastapi
 numpy
 tensorflow
+torch
 uvicorn
 mysqlclient
 sqlalchemy
