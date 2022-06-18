@@ -1,9 +1,9 @@
 from entity_model.base import Base, engine, Session
-from entity_model.distraction import Distraction
-from entity_model.account import Account
-from entity_model.user import User
-import datetime
 from entity_model.role import Role
+from entity_model.user import User
+from entity_model.account import Account
+import datetime
+from entity_model.distraction import Distraction
 
 # 2 - generate database schema
 Base.metadata.create_all(engine)

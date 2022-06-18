@@ -8,7 +8,7 @@ class Distraction(Base):
     id = Column(Integer, primary_key = True)
     time = Column(DateTime)
     category = Column(String(50), nullable=False)
-    image_path = Column(String(1000), nullable=False, unique=True)
+    image_path = Column(String(500), nullable=False, unique=True)
     #many to one
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref="distraction")
