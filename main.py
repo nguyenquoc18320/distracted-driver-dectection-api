@@ -25,7 +25,7 @@ from api.login import *
 from api.test import *
 from api.demo_predict import *
 from api.manage_user import *
-
+from api.register import *
 if __name__=='__main__':
     uvicorn.run(app)
     # image = Image.open('images\img_3.jpg')

@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 from ML_model.predict import predict
-
+from services.predict import predictimage
 @app.post("/demo_image")
 def predict_image(img: UploadFile = File(...)):
     original_image = Image.open(img.file)
@@ -37,3 +37,15 @@ def predict_image(img: UploadFile = File(...)):
     #     'class_name': class_name,
     #     'probability': float(prob)
     # }
+
+@app.post("/predict_text")
+def predict_text(img: UploadFile = File(...)):
+    original_image = Image.open(img.file)
+    print('call')
+    class_name, prob = predictimage(original_image)
+    print(class_name)
+    return { "data":{       
+                "class_name": class_name,
+                "probability": float(prob)
+        }
+    }
