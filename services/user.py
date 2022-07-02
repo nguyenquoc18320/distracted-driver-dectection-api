@@ -1,3 +1,5 @@
+from pickle import TRUE
+from xmlrpc.client import Boolean, DateTime, boolean
 from sqlalchemy import select
 from entity_model.account import Account
 from entity_model.user import User
@@ -16,17 +18,6 @@ def get_user_by_username_password(username: str, password: str) -> User:
         return get_user_by_id(row.user.id)
     
     return None
-def add_user2(names: str, driver_licenses: str)-> User:
-    
-    session = Session()
-    user_new = User(name = names, gender = True, birthday =  datetime.datetime(2022, 1,1), phone='', driver_license = driver_licenses, role = get_role_by_id(1))
-    current_user = session.merge(user_new)
-    session.add(current_user)
-    session.commit()
-    session.close()
-
-    return user_new
-
 def add_user(names: str, driver_licenses: str, usernames: str, passwords: str)-> User:
 
     user_new = User(name = names, gender = True, birthday =  datetime.datetime(2022, 1,1), phone='', driver_license = driver_licenses, role = get_role_by_id(1))
@@ -45,6 +36,16 @@ def add_user(names: str, driver_licenses: str, usernames: str, passwords: str)->
     session.commit()
     session.close()
     return user_new
+
+
+def update_user(id: int, name: str, gender: bool, birthday: DateTime , phone: str)-> User:
+    
+    session = Session()
+    session.query(User).filter(User.id == id).update({'name': name, 'gender': gender, 'birthday': birthday, 'phone': phone})
+    session.commit()
+    session.close()
+    
+    return get_user_by_id(id)
 
 def get_role_by_id (id) -> Role:
     session = Session()
@@ -90,3 +91,16 @@ def get_user_list() -> list():
     # except:
     #     print('error get users')
     #     return []
+
+def get_account_by_license (driverlicense) -> Account:
+    
+    session = Session()
+    user_result = session.query(Account).filter(Account.user == get_user_by_license(driverlicense))
+    session.close()
+    
+    for row in user_result:
+        return row
+    
+    return None
+
+
