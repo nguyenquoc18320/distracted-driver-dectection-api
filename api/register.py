@@ -15,6 +15,7 @@ class NewUser(BaseModel):
     driver_license: str
     username: str
     password: str
+    
 # class User(BaseModel):
 #     name: str
 #     driver_license: str
