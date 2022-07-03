@@ -4,7 +4,8 @@ from fastapi.responses import StreamingResponse
 import numpy as np
 import cv2
 
-recognition_model = Recogition_model('ML_model/recognition/checkpoints/EfficientNetB0_new_flip-10-0.02.hdf5')
+recognition_model = Recogition_model('ML_model/recognition/checkpoints/MobileNet_new_flip-15-0.01.hdf5',
+                        threshold=0.7)
 
 def predict(image):
     '''
@@ -29,9 +30,13 @@ def predict(image):
         bbox[3] = min(bbox[3], cv2_image.shape[0]-1)
         cv2_image = cv2_image[int(bbox[1]) : int(bbox[3]), int(bbox[0]) : int(bbox[2]), :]
         
-    class_name, prob = recognition_model.recognize(cv2_image)
-    print('{}, {}'.format(class_name, prob))
+        class_name, prob = recognition_model.recognize(cv2_image)
+        print('{}, {}'.format(class_name, prob))
     
-    return (bbox, class_name, prob)
+        return (bbox, class_name, prob)
+    
+    #if not detecting person, return 'safe driving'
+    print('safe driving, 0.5')
+    return (None, 'safe driving', 0.5)
     # return StreamingResponse(filtered_image, media_type="image/jpeg")
 
