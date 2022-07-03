@@ -1,0 +1,10 @@
+fastapi
+numpy
+tensorflow
+torch
+uvicorn
+mysqlclient
+sqlalchemy
+PyJWT
+python-decouple
+python-multipart
