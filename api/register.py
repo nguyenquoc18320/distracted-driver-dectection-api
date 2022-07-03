@@ -5,10 +5,11 @@ from main import app
 from auth.auth_handler import *
 from entity_model.base import Session
 from entity_model.account import Account
-from services.user import add_user
+from services.user import add_user, get_user_by_id
 from services.account import add_account
 from pydantic import BaseModel
-import datetime
+from fastapi import FastAPI, Body, Depends,Form
+from auth.auth_bearer import JWTBearer
 
 class NewUser(BaseModel):
     name: str
@@ -21,20 +22,19 @@ class NewUser(BaseModel):
 #     driver_license: str
 @app.post('/register')
 # def login (username: str, password: str):  name: str, driver_license: str
-def register(newuser: NewUser):
-    # name = 'new'
-    # driver_license = 'asdsasc3'
-    result = add_user(newuser.name, newuser.driver_license,newuser.username, newuser.password)
-    # result2 = add_account(newuser.username, newuser.password, result)
-    # user_new = User(user.name, True, datetime.datetime(2022, 1,1), '0354316135', user.driver_license,"1" )
-    # result = add_user()
-    if result is None:
+def register(token: str = Depends(JWTBearer()), newuser: NewUser = Body(...)):
+    userid = decodeJWT(token)['user_id']
+    user = get_user_by_id(userid) 
+    if user.role.name.lower() != 'admin':
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
-    token = signJWT(result.id)
+
+    result_user = add_user(newuser.name, newuser.driver_license,newuser.username, newuser.password)
+    if result_user is None:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    token = signJWT(user.id)
 
     return { "data": { 
                 "access_token" :token,
-                "user": result
+                "user": result_user
                 }
             }

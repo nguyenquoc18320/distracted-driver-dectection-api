@@ -20,7 +20,7 @@ def get_user_by_username_password(username: str, password: str) -> User:
     return None
 def add_user(names: str, driver_licenses: str, usernames: str, passwords: str)-> User:
 
-    user_new = User(name = names, gender = True, birthday =  datetime.datetime(2022, 1,1), phone='', driver_license = driver_licenses, role = get_role_by_id(1))
+    user_new = User(name = names, gender = True, birthday =  datetime.datetime(2022, 1,1), phone='', driver_license = driver_licenses, role = get_role_by_id(2))
     
     session = Session()
     current_user = session.merge(user_new)
@@ -87,6 +87,7 @@ def get_user_list() -> list():
         print('done')
         for row in result:
             user_list.append(row)
+        print(user_list)
         return user_list
     # except:
     #     print('error get users')
