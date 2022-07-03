@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -7,12 +10,18 @@ from PIL import Image
 
 app = FastAPI(debug=True)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6
 @app.get("/")
 def home():
     return {'text': 'Hello'}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6
 origins = ["*"]
 
 app.add_middleware(
@@ -23,10 +32,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
 # import all api
 
 from api.monitor_system import *
 from api.get_distraction import *
+=======
+#import all api
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6
 from api.login import *
 from api.test import *
 from api.demo_predict import *
@@ -36,6 +49,7 @@ from api.password_reset import *
 from api.change_pass import *
 from api.update_user import *
 from api.add_distraction import *
+<<<<<<< HEAD
 
 # ---AUTO MONITOR ML SYSTEM----
 
@@ -69,3 +83,10 @@ if __name__ == '__main__':
     t.start()
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
+=======
+if __name__=='__main__':
+    uvicorn.run(app)
+    # image = Image.open('images\img_3.jpg')
+    # predict(image)
+
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6

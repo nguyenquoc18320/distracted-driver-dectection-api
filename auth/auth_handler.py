@@ -4,7 +4,10 @@ from typing import Dict
 import jwt
 from decouple import config
 
+<<<<<<< HEAD
 from services.user import get_user_by_id
+=======
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6
 
 JWT_SECRET = config("secret")
 JWT_ALGORITHM = config("algorithm")
@@ -31,6 +34,7 @@ def decodeJWT(token: str) -> dict:
         decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return decoded_token if decoded_token["expires"] >= time.time() else None
     except:
+<<<<<<< HEAD
         return {}
 
 
@@ -44,3 +48,6 @@ def check_admin_role_by_token(access_token: str ) -> bool:
         return False
     
     return True
+=======
+        return {}
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6

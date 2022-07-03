@@ -12,7 +12,11 @@ from  ML_model.SSD.model.vgg import VGG16BaseNet, AuxiliaryNet, PredictionNet
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # device='cpu'
 
+<<<<<<< HEAD
 trained_model = torch.load('ML_model\SSD\checkpoints\model_state_ssd300.pth.tar', 
+=======
+trained_model = torch.load('model_state_ssd300.pth.tar', 
+>>>>>>> d846b46d8c47d16885685fdc2e22ad13b1cfbff6
                 map_location ='cpu')
 
 start_epoch = trained_model["epoch"] + 1
