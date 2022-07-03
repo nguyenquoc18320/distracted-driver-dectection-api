@@ -31,6 +31,7 @@ class Recogition_model():
 
     def preprocess(self, img):
         img = cv2.resize(img, self.image_size)
+        img = keras.applications.mobilenet.preprocess_input(img)
 
         return np.array(img, dtype = np.float32)
 

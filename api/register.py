@@ -8,13 +8,14 @@ from entity_model.account import Account
 from services.user import add_user
 from services.account import add_account
 from pydantic import BaseModel
-import datetime
+# import datetime
 
 class NewUser(BaseModel):
     name: str
     driver_license: str
     username: str
     password: str
+    
 # class User(BaseModel):
 #     name: str
 #     driver_license: str
