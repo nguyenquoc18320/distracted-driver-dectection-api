@@ -47,6 +47,7 @@ class BackgroundTasks(threading.Thread):
 
         while True:
             # monitor system
+            print('Checktime')
             if (datetime.now() > datetime(datetime.now().year, datetime.now().month, datetime.now().day, 0, 0, 0)
                     and datetime.now() < datetime(datetime.now().year, datetime.now().month, datetime.now().day, 2, 0, 0)):
                 print('Run monitoring')
