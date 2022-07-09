@@ -42,4 +42,19 @@ def get_total_image_not_detecting_person(date: datetime):
     except:
         return None
 
-    
+def get_distraction_list(userid: int) -> list():
+    # print("a")
+    try:
+        distraction_list =[]
+        session = Session()
+        # result = session.query(User).filter(User.role_id ==  2)
+        result = session.query(Distraction).filter(Distraction.user  == get_user_by_id(userid))
+        session.close()
+        for row in result:
+
+            distraction_list.append(row)
+        print(distraction_list)
+        return distraction_list
+    except:
+        print('error get distractions')
+        return []

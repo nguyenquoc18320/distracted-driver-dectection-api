@@ -1,7 +1,7 @@
 from datetime import date as date_type
 from main import app
 from auth.auth_handler import *
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Form, Body
 from auth.auth_bearer import JWTBearer
 from services.user import *
 from services.distraction import *
@@ -30,6 +30,3 @@ def getTotalDistraction(date: date_type, token: str = Depends(JWTBearer())):
         raise HTTPException(status_code=500, detail="Internal Server Error")
     
     return {"total": total}
-    
-        
-    
