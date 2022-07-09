@@ -39,12 +39,12 @@ def get_account_by_user (userid: int) -> Account:
     
     return None
 
-def passwordupdate(accountcurrent: Account, oldpassword: str, newpassword: str) -> boolean:
-    check = False
-    if accountcurrent.password == oldpassword:
+def passwordupdate(accountcurrent: Account, newpassword: str) -> boolean:
+    try:
         session = Session()
         session.query(Account).filter(Account.id == accountcurrent.id).update({'password': newpassword})
         session.commit()
         session.close()
-        check = True
-    return check
+        return True
+    except:
+        return False

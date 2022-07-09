@@ -23,34 +23,37 @@ def get_user_by_username_password_for_login(username: str, password: str) -> Use
     
     return None
 
-def add_user(names: str, driver_licenses: str, usernames: str, passwords: str)-> User:
+def add_user(names: str, driver_licenses: str, gender: bool, birthday: DateTime , phone: str, usernames: str, passwords: str)-> User:
+    try:
+        user_new = User(name = names, gender = gender, birthday =  birthday, phone=phone, driver_license = driver_licenses, role = get_role_by_id(2))
+        
+        session = Session()
+        current_user = session.merge(user_new)
+        session.add(current_user)
+        session.commit()
+        
+        session.expire(current_user)
 
-    user_new = User(name = names, gender = True, birthday =  datetime(2022, 1,1), phone='', driver_license = driver_licenses, role = get_role_by_id(1))
-    
-    session = Session()
-    current_user = session.merge(user_new)
-    session.add(current_user)
-    session.commit()
-      
-    session.expire(current_user)
-
-    session.refresh(current_user)
-    account_new = Account(username=usernames, password=passwords, user=get_user_by_license(driver_licenses))
-    current_account = session.merge(account_new)
-    session.add(current_account)
-    session.commit()
-    session.close()
-    return user_new
-
+        session.refresh(current_user)
+        account_new = Account(username=usernames, status=1, password=passwords, user=get_user_by_license(driver_licenses))
+        current_account = session.merge(account_new)
+        session.add(current_account)
+        session.commit()
+        session.close()
+        return user_new
+    except:
+        return None
 
 def update_user(id: int, name: str, gender: bool, birthday: DateTime , phone: str)-> User:
-    
-    session = Session()
-    session.query(User).filter(User.id == id).update({'name': name, 'gender': gender, 'birthday': birthday, 'phone': phone})
-    session.commit()
-    session.close()
-    
-    return get_user_by_id(id)
+    try:
+        session = Session()
+        session.query(User).filter(User.id == id).update({'name': name, 'gender': gender, 'birthday': birthday, 'phone': phone})
+        session.commit()
+        session.close()
+        
+        return get_user_by_id(id)
+    except:
+        return None
 
 def get_role_by_id (id) -> Role:
     session = Session()
@@ -117,6 +120,7 @@ def get_user_list() -> list():
             row['Account'].username = '******'
             row['Account'].password = '******'
             user_list.append(row)
+        print(user_list)
         return user_list
     except:
         print('error get users')

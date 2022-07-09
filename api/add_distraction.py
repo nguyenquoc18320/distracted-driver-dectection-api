@@ -1,4 +1,6 @@
 from datetime import datetime
+from pickle import FALSE, TRUE
+from tabnanny import check
 from unittest import result
 from fastapi import HTTPException
 from auth.auth_handler import decodeJWT
@@ -10,6 +12,8 @@ from auth.auth_bearer import JWTBearer
 from services.predict import add_distrac, add_no_person
 from pydantic import BaseModel
 import os
+import random
+
 
 from services.total_images import add_num_image
 from services.user import get_account_by_userid
