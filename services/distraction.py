@@ -50,7 +50,6 @@ def get_total_image_not_detecting_person(date: datetime):
     except:
         return None
 
-<<<<<<< HEAD
 
 def get_num_distraction_for_each_user(date: datetime, page, items_per_page):
     try:
@@ -85,7 +84,6 @@ def get_num_distraction_for_each_user(date: datetime, page, items_per_page):
         return result, num_pages
     except:
         return None, None
-=======
 def get_distraction_list(userid: int) -> list():
     # print("a")
     try:
@@ -102,4 +100,3 @@ def get_distraction_list(userid: int) -> list():
     except:
         print('error get distractions')
         return []
->>>>>>> 27dfef9 (update final)
