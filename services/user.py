@@ -95,7 +95,7 @@ def get_account_by_userid(userid) -> Account:
 def get_user_by_id (id) -> User:
     session = Session()
     user_result = session.query(User).filter(User.id ==  id)
-    session.close()
+    
     
     for row in user_result:
         return row

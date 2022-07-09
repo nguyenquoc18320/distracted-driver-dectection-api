@@ -10,21 +10,22 @@ from fastapi import FastAPI, File, UploadFile
 from entity_model.base import Base, engine, Session
 from entity_model.distraction import Distraction
 from services.user import get_user_by_id
+# from ML_model.predict import predict
 
-recognition_model = Recogition_model(
-    'ML_model/recognition/checkpoints/EfficientNetB0_new_flip-10-0.02.hdf5')
+# recognition_model = Recogition_model(
+#     'ML_model/recognition/checkpoints/EfficientNetB0_new_flip-10-0.02.hdf5')
 
 
-def predictimage(image):
+# def predictimage(image):
 
-    pil_image = image.convert('RGB')
-    cv2_image = np.array(pil_image)
-    cv2_image = cv2_image[:, :, ::-1].copy()
+#     pil_image = image.convert('RGB')
+#     cv2_image = np.array(pil_image)
+#     cv2_image = cv2_image[:, :, ::-1].copy()
 
-    class_name, prob = recognition_model.recognize(cv2_image)
-    print('{}, {}'.format(class_name, prob))
+#     bbox, class_name, prob = predict(pil_image)
+#     print('{}, {}'.format(class_name, prob))
 
-    return (class_name, prob)
+#     return (class_name, prob)
 
 
 def add_distrac(category, path, userid) -> Distraction:

@@ -2,6 +2,7 @@ import tensorflow.keras as keras
 import cv2
 import numpy as np
 import tensorflow as tf
+import pickle
 
 # #train with gpu
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
@@ -10,12 +11,16 @@ if len(physical_devices) > 0:
     tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 class Recogition_model():
-    def __init__(self, model_path, input_image_size=(128, 128), threshold=0.5):
+    def __init__(self, model_path, threshold_file, input_image_size=(128, 128)):
         self.model = keras.models.load_model(model_path)
         self.image_size = input_image_size
-        self.threshold = threshold
+        # self.threshold = threshold
         self.labels = self.get_label('ML_model/recognition/label_map.txt')
-
+        
+        #load threshold from file
+        f = open(threshold_file, "rb")
+        self.threshold = pickle.load(f)
+        f.close()
     
     def get_label(self, label_path):
         label={}
@@ -49,7 +54,7 @@ class Recogition_model():
         pred_label = np.argmax(pred)
         prob = max(pred)
         
-        if prob >= self.threshold:
+        if prob >= self.threshold[pred_label]:
             return self.labels[pred_label], prob
         else:
             return self.labels[0], 0.5

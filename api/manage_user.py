@@ -41,4 +41,3 @@ def deactivate_user(accountid: int, token: str = Depends(JWTBearer())):
     result = deactivate_account(accountid)
     return {"data" : result}
 
-

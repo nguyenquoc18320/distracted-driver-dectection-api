@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 
 recognition_model = Recogition_model('ML_model/recognition/checkpoints/MobileNet_new_flip-15-0.01.hdf5',
-                        threshold=0.7)
+                        threshold_file='ML_model/recognition/threshold_files/mobilenet_threshold.pkl')
 
 def predict(image):
     '''
