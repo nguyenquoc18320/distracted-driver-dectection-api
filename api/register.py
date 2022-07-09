@@ -10,16 +10,16 @@ from services.account import add_account
 from pydantic import BaseModel
 from fastapi import FastAPI, Body, Depends,Form
 from auth.auth_bearer import JWTBearer
-
+from datetime import date 
 class NewUser(BaseModel):
     name: str
     driver_license: str
+    gender: bool
+    birthday: date
+    phone: str
     username: str
     password: str
-    
-# class User(BaseModel):
-#     name: str
-#     driver_license: str
+
 @app.post('/register')
 # def login (username: str, password: str):  name: str, driver_license: str
 def register(token: str = Depends(JWTBearer()), newuser: NewUser = Body(...)):
@@ -28,7 +28,7 @@ def register(token: str = Depends(JWTBearer()), newuser: NewUser = Body(...)):
     if user.role.name.lower() != 'admin':
         raise HTTPException(status_code=401, detail="Unauthorized")
 
-    result_user = add_user(newuser.name, newuser.driver_license,newuser.username, newuser.password)
+    result_user = add_user(newuser.name, newuser.driver_license, newuser.gender, newuser.birthday, newuser.phone, newuser.username, newuser.password)
     if result_user is None:
         raise HTTPException(status_code=401, detail="Unauthorized")
     token = signJWT(user.id)
