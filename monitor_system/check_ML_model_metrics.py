@@ -21,7 +21,7 @@ def monitor_percentage_of_distraction(date):
 
     # date was monitored
     result = session.query(Monitor_system).filter(
-        Monitor_system.date).filter(Monitor_system.ml_metric_id == 1)
+        Monitor_system.date==date).filter(Monitor_system.ml_metric_id == 1)
     for row in result:
         session.close()
         return False
@@ -74,7 +74,7 @@ def monitor_percentage_of_images_not_detect_person(date):
 
     # date was monitored
     result = session.query(Monitor_system).filter(
-        Monitor_system.date).filter(Monitor_system.ml_metric_id == 2)
+        Monitor_system.date==date).filter(Monitor_system.ml_metric_id == 2)
     for row in result:
         session.close()
         return False
