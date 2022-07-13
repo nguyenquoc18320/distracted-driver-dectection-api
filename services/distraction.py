@@ -19,6 +19,7 @@ def get_total_distraction_by_user(userid, date: datetime):
         result = session.query(Distraction).filter(Distraction.user_id == userid)\
             .filter(Distraction.no_person == False)\
             .filter(Distraction.time.between(start_day, end_day)).count()
+        session.commit()
         session.close()
         return result
     except:
@@ -45,6 +46,7 @@ def get_total_image_not_detecting_person(date: datetime):
         end_day = datetime(date.year, date.month, date.day, 23, 59, 59)
         result = session.query(Distraction).filter(Distraction.no_person == True)\
             .filter(Distraction.time.between(start_day, end_day)).count()
+        session.commit()
         session.close()
         return result
     except:
@@ -73,13 +75,13 @@ def get_num_distraction_for_each_user(date: datetime, page, items_per_page):
         start_index = (page-1) * items_per_page 
 
         for row in result_query[ start_index : (start_index + items_per_page)]:
+            print(row)
             data = {
                 "User" : row["User"],
                 "num_distractions": row['num_distractions']
             }
             result.append(data)
             # print(row['User'])
-
         session.close()
         return result, num_pages
     except:
@@ -90,7 +92,9 @@ def get_distraction_list(userid: int) -> list():
         distraction_list =[]
         session = Session()
         # result = session.query(User).filter(User.role_id ==  2)
-        result = session.query(Distraction).filter(Distraction.user  == get_user_by_id(userid))
+        result = session.query(Distraction).filter(Distraction.user  == get_user_by_id(userid))\
+                        .filter(Distraction.no_person==False)
+        session.commit()
         session.close()
         for row in result:
 

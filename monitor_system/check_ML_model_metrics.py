@@ -6,8 +6,9 @@ from datetime import datetime
 from entity_model.base import Session
 from entity_model.monitor_system import Monitor_system
 from entity_model.total_images import Total_images
+from monitor_system.send_email import send_mail
 from services.distraction import get_total_distraction, get_total_image_not_detecting_person
-
+from monitor_system.monitoring_threshold import *
 #-----MONITOR PERCENTAGE of DISTRACTION (metrics =1)
 # compute percentage of distraction per day
 def monitor_percentage_of_distraction(date):
@@ -47,6 +48,16 @@ def monitor_percentage_of_distraction(date):
 
         percentage = float(total_distraction)/total_images
         print(percentage)
+
+        if percentage > distraction_percentage:
+            send_mail('nguyenquoc18320@gmail.com', 
+            "ALERT from Distracted Driver Detection System\n" 
+            + "Metric: distraction percentage"
+            + "\nDate: " + date.strftime('%B %d, %Y') 
+            + "\nThreshold: " + str(distraction_percentage)
+            + "\nnCalculated PERCENTAGE: " + str(percentage)
+            + "\n\nPlease evaluate ML system to make sure it works correctly!")
+
 
         monitoring_object = Monitor_system(id=0, date=date, statistic=percentage, ml_metric_id=1)
         session.add(monitoring_object)
@@ -100,6 +111,14 @@ def monitor_percentage_of_images_not_detect_person(date):
 
         percentage = float(total_distraction)/total_images
         print(percentage)
+        if percentage > not_recognize_person:
+            send_mail('nguyenquoc18320@gmail.com', 
+            "ALERT from Distracted Driver Detection System\n" 
+            + "Metric: not recognizing person"
+            + "\nDate: " + date.strftime('%B %d, %Y') 
+            + "\nThreshold: " + str(not_recognize_person)
+            + "\nCalculated PERCENTAGE: " + str(percentage) 
+            + "\n\nPlease evaluate ML system (SSD) to make sure it works correctly!")
 
         monitoring_object = Monitor_system(id=0, date=date, statistic=percentage, ml_metric_id=2)
         session.add(monitoring_object)
