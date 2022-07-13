@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from entity_model.create_db import *
 from PIL import Image
+from monitor_system.send_email import send_mail
 
 app = FastAPI(debug=True)
 
@@ -33,7 +34,8 @@ from api.password_reset import *
 from api.change_pass import *
 from api.update_user import *
 from api.add_distraction import *
-
+from api.distraction_user import *
+from api.get_image import *
 # ---AUTO MONITOR ML SYSTEM----
 
 from datetime import datetime, timedelta

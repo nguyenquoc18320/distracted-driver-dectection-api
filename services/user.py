@@ -1,3 +1,4 @@
+import math
 from requests import session
 from sqlalchemy import select, true, update
 from xmlrpc.client import Boolean, DateTime, boolean
@@ -14,43 +15,45 @@ def get_user_by_username_password_for_login(username: str, password: str) -> Use
     session = Session()
     acc_result = session.query(Account).filter(Account.username ==  username) \
                                         .filter(Account.password == password)
+    
     session.close()
-
     for row in acc_result:
         # check whether account is active
         if row.status == True:
             return get_user_by_id(row.user.id)
-    
     return None
 
-def add_user(names: str, driver_licenses: str, usernames: str, passwords: str)-> User:
+def add_user(names: str, driver_licenses: str, gender: bool, birthday: DateTime , phone: str, usernames: str, passwords: str)-> User:
+    try:
+        user_new = User(name = names, gender = gender, birthday =  birthday, phone=phone, driver_license = driver_licenses, role = get_role_by_id(2))
+        
+        session = Session()
+        current_user = session.merge(user_new)
+        session.add(current_user)
+        session.commit()
+        
+        session.expire(current_user)
 
-    user_new = User(name = names, gender = True, birthday =  datetime(2022, 1,1), phone='', driver_license = driver_licenses, role = get_role_by_id(1))
-    
-    session = Session()
-    current_user = session.merge(user_new)
-    session.add(current_user)
-    session.commit()
-      
-    session.expire(current_user)
-
-    session.refresh(current_user)
-    account_new = Account(username=usernames, password=passwords, user=get_user_by_license(driver_licenses))
-    current_account = session.merge(account_new)
-    session.add(current_account)
-    session.commit()
-    session.close()
-    return user_new
-
+        session.refresh(current_user)
+        account_new = Account(username=usernames, status=1, password=passwords, user=get_user_by_license(driver_licenses))
+        current_account = session.merge(account_new)
+        session.add(current_account)
+        session.commit()
+        session.close()
+        return user_new
+    except:
+        return None
 
 def update_user(id: int, name: str, gender: bool, birthday: DateTime , phone: str)-> User:
-    
-    session = Session()
-    session.query(User).filter(User.id == id).update({'name': name, 'gender': gender, 'birthday': birthday, 'phone': phone})
-    session.commit()
-    session.close()
-    
-    return get_user_by_id(id)
+    try:
+        session = Session()
+        session.query(User).filter(User.id == id).update({'name': name, 'gender': gender, 'birthday': birthday, 'phone': phone})
+        session.commit()
+        session.close()
+        
+        return get_user_by_id(id)
+    except:
+        return None
 
 def get_role_by_id (id) -> Role:
     session = Session()
@@ -75,6 +78,7 @@ def get_user_by_id (id) -> User:
 def get_user_by_license (driverlicense) -> User:
     session = Session()
     user_result = session.query(User).filter(User.driver_license ==  driverlicense)
+    session.commit()
     session.close()
     
     for row in user_result:
@@ -85,6 +89,7 @@ def get_user_by_license (driverlicense) -> User:
 def get_account_by_userid(userid) -> Account:
     session = Session()
     result = session.query(Account).filter(Account.user_id ==  userid) 
+    session.commit()
     session.close()
 
     for row in result:
@@ -95,29 +100,54 @@ def get_account_by_userid(userid) -> Account:
 def get_user_by_id (id) -> User:
     session = Session()
     user_result = session.query(User).filter(User.id ==  id)
-    
+    session.commit()
+    session.close()
     
     for row in user_result:
         return row
     
     return None
 
+#---COUNT total users
+def count_total_users() -> int:
+    try:
+        session = Session()
+        # result = session.query(User).filter(User.role_id ==  2)
+        result = session.query(User, Account).join(Account, User.id == Account.user_id)\
+                    .filter(User.role_id==2).count()
+
+        session.close()
+        return result
+        
+    except:
+        print('error get users')
+        session.close()
+        return 0
 
 #---get all user 
-def get_user_list() -> list():
+def get_user_list(page, items_per_page) -> list():
     try:
         user_list =[]
         session = Session()
         # result = session.query(User).filter(User.role_id ==  2)
         result = session.query(User, Account).join(Account, User.id == Account.user_id)\
-                    .filter(User.role_id==2)
-        session.close()
-        for row in result:
+                    .filter(User.role_id==2)\
+                    .order_by(User.name.asc())
+                    
+        all_num_users = result.count()
+        #num pages for pagination
+        num_pages = math.ceil(all_num_users/items_per_page)
+
+        start_index = (page-1) * items_per_page 
+
+        for row in result[start_index : (start_index + items_per_page)]:
             # hide username and password
             row['Account'].username = '******'
             row['Account'].password = '******'
             user_list.append(row)
-        return user_list
+
+        session.close()
+        return user_list,  num_pages
     except:
         print('error get users')
         return []

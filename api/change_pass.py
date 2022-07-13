@@ -6,7 +6,8 @@ from main import app
 from auth.auth_handler import *
 from entity_model.base import Session
 from entity_model.account import Account
-
+from fastapi import FastAPI, Body, Depends,Form
+from auth.auth_bearer import JWTBearer
 from services.account import get_account_by_user, passwordupdate
 from pydantic import BaseModel
 
@@ -14,22 +15,25 @@ from services.user import get_user_by_id
 
 class Update_Password(BaseModel):
     id: int
-    oldpassword: str
     newpassword: str
 @app.put('/password_update')
-def password_update(updatepass: Update_Password):
-    request = 'Fail'
-    
+def password_update(token: str = Depends(JWTBearer()),updatepass: Update_Password = Body(...)):
+    alert = 'Fail'
+    userid = decodeJWT(token)['user_id']
+    user = get_user_by_id(userid) 
+    if user.role.name.lower() != 'admin':
+        raise HTTPException(status_code=401, detail="Unauthorized")
     account_current = get_account_by_user(updatepass.id)
     if account_current is None:
-        request = 'Account does not exist!!!'
+        alert = 'Account does not exist!!!'
     else:
-        if passwordupdate(account_current, updatepass.oldpassword, updatepass.newpassword):
+        if passwordupdate(account_current, updatepass.newpassword):
             user_request = get_user_by_id(updatepass.id)
-            request = 'Update Successfull'
-
+            alert = 'Update Successfull'
+    token = signJWT(user.id)
     return { "data": { 
-                "request" :request,
+                "access_token" :token,
+                "request" :alert,
                 "user": user_request
                 }
             }
