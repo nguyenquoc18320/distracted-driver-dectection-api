@@ -21,12 +21,12 @@ class UpdateUser(BaseModel):
     birthday: date
     phone: str
 @app.put('/update-user')
-# def register(token: str = Depends(JWTBearer()), newuser: UpdateUser = Body(...)):
-def update_User( newuser: UpdateUser = Body(...)):
-    # userid = decodeJWT(token)['user_id']
-    # user = get_user_by_id(userid) 
-    # if user.role.name.lower() != 'admin':
-    #     raise HTTPException(status_code=401, detail="Unauthorized")
+def update_User(token: str = Depends(JWTBearer()), newuser: UpdateUser = Body(...)):
+# def update_User( newuser: UpdateUser = Body(...)):
+    userid = decodeJWT(token)['user_id']
+    user = get_user_by_id(userid) 
+    if user.role.name.lower() != 'admin':
+        raise HTTPException(status_code=401, detail="Unauthorized")
     result = update_user(newuser.id, newuser.name, newuser.gender, newuser.birthday, newuser.phone)
     alert = "Update Fail"
     if result is None:
