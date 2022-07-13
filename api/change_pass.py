@@ -37,6 +37,6 @@ def password_update(updatepass: Update_Password = Body(...)):
                 "request" :alert,
                 "user": user_request
                 }
-            }
+            } 
     
    
