@@ -17,12 +17,13 @@ class Update_Password(BaseModel):
     id: int
     newpassword: str
 @app.put('/password_update')
-def password_update(token: str = Depends(JWTBearer()),updatepass: Update_Password = Body(...)):
+# def password_update(token: str = Depends(JWTBearer()),updatepass: Update_Password = Body(...)):
+def password_update(updatepass: Update_Password = Body(...)):
     alert = 'Fail'
-    userid = decodeJWT(token)['user_id']
-    user = get_user_by_id(userid) 
-    if user.role.name.lower() != 'admin':
-        raise HTTPException(status_code=401, detail="Unauthorized")
+    # userid = decodeJWT(token)['user_id']
+    # user = get_user_by_id(userid) 
+    # if user.role.name.lower() != 'admin':
+    #     raise HTTPException(status_code=401, detail="Unauthorized")
     account_current = get_account_by_user(updatepass.id)
     if account_current is None:
         alert = 'Account does not exist!!!'
@@ -30,12 +31,12 @@ def password_update(token: str = Depends(JWTBearer()),updatepass: Update_Passwor
         if passwordupdate(account_current, updatepass.newpassword):
             user_request = get_user_by_id(updatepass.id)
             alert = 'Update Successfull'
-    token = signJWT(user.id)
+    # token = signJWT(user.id)
     return { "data": { 
-                "access_token" :token,
+              
                 "request" :alert,
                 "user": user_request
                 }
-            }
+            } 
     
    

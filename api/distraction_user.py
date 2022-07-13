@@ -11,9 +11,9 @@ class UserBase(BaseModel):
     userid: int
 @app.get('/getdistractions')
 # def get_Distractions_by_user(userid: int = Body(...), token: str = Depends(JWTBearer())):
-def get_distractions_by_userid(userid: int, token: str = Depends(JWTBearer())):
-    if check_admin_role_by_token(token) == False:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+def get_distractions_by_userid(userid: int):#, token: str = Depends(JWTBearer())):
+    # if check_admin_role_by_token(token) == False:
+    #     raise HTTPException(status_code=401, detail="Unauthorized")
 
     #--
     distraction_list = get_distraction_list(userid)
