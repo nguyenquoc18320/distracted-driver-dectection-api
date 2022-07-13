@@ -21,8 +21,8 @@ class New_Distraction(BaseModel):
     userid: int
 
 @app.post("/add-distraction")
-def add_distraction(img: UploadFile = File(...),  token: str = Depends(JWTBearer())):
-
+def add_distraction(img: UploadFile = File(...), token: str = Depends(JWTBearer())):
+    
     userid = decodeJWT(token)['user_id']
     account = get_account_by_userid(userid)
 
