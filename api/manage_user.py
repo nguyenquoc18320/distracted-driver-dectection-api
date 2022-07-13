@@ -7,17 +7,32 @@ from services.user import *
 from typing import List
 from auth.auth_handler import check_admin_role_by_token
 
-@app.get('/get-users')
-def get_users_by_Admin_role (token: str = Depends(JWTBearer())):
+@app.get('/get-total-users')
+def get_total_users (token: str = Depends(JWTBearer())):
 
     if check_admin_role_by_token(token) == False:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     #--
-    user_list = get_user_list()
+    total_users = count_total_users()
 
     return { 
-            'data':user_list
+            'total': total_users
+        }
+
+@app.get('/get-users')
+def get_users_by_Admin_role (page: int, items_per_page: int, token: str = Depends(JWTBearer())):
+
+    if check_admin_role_by_token(token) == False:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    #--
+    user_list, num_pages = get_user_list(page, items_per_page)
+
+    return { 
+            'data':user_list,
+            'page': page,
+            'total_pages': num_pages
         }
 
 @app.patch("/activate-user")
