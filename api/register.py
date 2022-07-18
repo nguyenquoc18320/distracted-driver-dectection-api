@@ -31,10 +31,10 @@ def register(token: str = Depends(JWTBearer()), newuser: NewUser = Body(...)):
     alert = 'Fail'
     result_user = add_user(newuser.name, newuser.driver_license, newuser.gender, newuser.birthday, newuser.phone, newuser.username, newuser.password)
     if result_user is None:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        alert = 'Invalid or used information!!!'
     else:
         alert = 'Add Successfull'
-    token = signJWT(user.id)
+    # token = signJWT(user.id)
 
     return { "data": { 
                 "access_token" :token,

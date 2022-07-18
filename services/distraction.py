@@ -104,3 +104,28 @@ def get_distraction_list(userid: int) -> list():
     except:
         print('error get distractions')
         return []
+
+def get_distraction_list_by_pages(userid: int, date, page, items_per_page) -> list():
+    # print("a")
+    try:
+        start_day = datetime(date.year, date.month, date.day, 0, 0, 0)
+        end_day = datetime(date.year, date.month, date.day, 23, 59, 59)
+
+        distraction_list =[]
+        session = Session()
+        result = session.query(Distraction).filter(Distraction.user  == get_user_by_id(userid))\
+                        .filter(Distraction.no_person==False)\
+                        .filter(Distraction.time.between(start_day, end_day))
+        session.commit()
+        session.close()
+
+        num_total_result = result.count()
+        num_page = math.ceil(num_total_result/items_per_page)
+        start_index = (page-1) * items_per_page 
+        for row in result[start_index : (start_index + items_per_page)]:
+            distraction_list.append(row)
+        print(distraction_list)
+        return distraction_list,  num_page
+    except:
+        print('error get distractions')
+        return []

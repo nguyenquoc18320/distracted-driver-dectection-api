@@ -22,7 +22,7 @@ class UpdateUser(BaseModel):
     phone: str
 @app.put('/update-user')
 def update_User(token: str = Depends(JWTBearer()), newuser: UpdateUser = Body(...)):
-# def update_User( newuser: UpdateUser = Body(...)):
+    # def update_User( newuser: UpdateUser = Body(...)):
     userid = decodeJWT(token)['user_id']
     user = get_user_by_id(userid) 
     if user.role.name.lower() != 'admin':

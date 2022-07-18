@@ -22,3 +22,18 @@ def get_distractions_by_userid(userid: int):#, token: str = Depends(JWTBearer())
             'data':distraction_list
             
         }
+
+
+
+@app.get('/get-list-distraction')
+def get_distractions(userid: int, date: date_type, page: int, items_per_page: int, token: str = Depends(JWTBearer())):
+    #check admin role
+    if check_admin_role_by_token(token) == False:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    list_result, num_page = get_distraction_list_by_pages(userid, date, page, items_per_page)
+    return { 
+            'data':list_result,
+            'page': page,
+            'total_pages': num_page
+        }
